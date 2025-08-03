@@ -1,6 +1,5 @@
 import express, { Request, Response } from 'express';
 import serverless from 'serverless-http';
-import { Handler } from '@netlify/functions';
 
 const app = express();
 
@@ -14,4 +13,4 @@ app.get('/api/hello', (req: Request, res: Response) => {
   res.json({ message: 'Hello, TypeScript with Netlify Functions!' });
 });
 
-export const handler: Handler = serverless(app);
+export const handler = serverless(app);
