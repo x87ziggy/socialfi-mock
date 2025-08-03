@@ -46,14 +46,29 @@ Returns user information including their referral code and points.
 }
 ```
 
-### 2. Claim Referral
+### 2. Claim Referral (Secured with Signature)
 **POST** `/api/claim-referral/:refCode/:publicKey`
 
 Records that a user was referred by another user's referral code. Each user can only be referred once.
 
+**Security:** This endpoint requires a signature to verify ownership of the public key.
+
 **Parameters:**
 - `refCode` (string): The referral code of the referrer
 - `publicKey` (string): Solana wallet public key of the user being referred
+
+**Request Body:**
+```json
+{
+  "signature": "base58_encoded_signature",
+  "message": "Claiming referral with code: ABC123DE"
+}
+```
+
+**Signature Requirements:**
+- The `message` must contain the referral code being claimed
+- The `signature` must be a base58-encoded ed25519 signature
+- The signature must be created by signing the message with the private key corresponding to the publicKey
 
 **Success Response:**
 ```json
@@ -65,11 +80,27 @@ Records that a user was referred by another user's referral code. Each user can 
 }
 ```
 
-**Error Response (if already referred):**
+**Error Responses:**
+
+Already referred:
 ```json
 {
   "error": "Public key has already been referred",
   "publicKey": "7xKXtg2CW6kkb96..."
+}
+```
+
+Invalid signature:
+```json
+{
+  "error": "Invalid signature - unable to verify ownership of public key"
+}
+```
+
+Missing signature/message:
+```json
+{
+  "error": "Signature and message required for verification"
 }
 ```
 
@@ -138,9 +169,28 @@ Get user info:
 curl http://localhost:8888/api/user/7xKXtg2CW6kkb96RqXN3J3mWJtMSPRDm8p8gKkPyVUZZ
 ```
 
-Claim a referral:
+Claim a referral (requires signature):
 ```bash
-curl -X POST http://localhost:8888/api/claim-referral/ABC123DE/8yLYtg3DX7llc97SrYO4K4nXKuNTQSEn9q9hLlQzWVaA
+curl -X POST http://localhost:8888/api/claim-referral/ABC123DE/8yLYtg3DX7llc97SrYO4K4nXKuNTQSEn9q9hLlQzWVaA \
+  -H "Content-Type: application/json" \
+  -d '{
+    "signature": "your_base58_signature_here",
+    "message": "Claiming referral with code: ABC123DE"
+  }'
+```
+
+### Creating a Signature (Client-side Example)
+
+```javascript
+// Using @solana/web3.js
+import { Keypair } from '@solana/web3.js';
+import bs58 from 'bs58';
+
+const keypair = Keypair.fromSecretKey(/* your secret key */);
+const message = `Claiming referral with code: ${refCode}`;
+const messageBytes = new TextEncoder().encode(message);
+const signature = nacl.sign.detached(messageBytes, keypair.secretKey);
+const signatureBase58 = bs58.encode(signature);
 ```
 
 Get leaderboard:

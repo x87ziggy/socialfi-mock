@@ -12,11 +12,15 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "express": "^5.1.0"
+    "@netlify/blobs": "^10.0.8",
+    "bs58": "^6.0.0",
+    "express": "^5.1.0",
+    "tweetnacl": "^1.0.3"
   },
   "devDependencies": {
     "@netlify/functions": "^4.2.1",
     "@types/aws-lambda": "^8.10.152",
+    "@types/bs58": "^4.0.4",
     "@types/express": "^5.0.3",
     "@types/node": "^24.1.0",
     "netlify-cli": "^23.0.0",
