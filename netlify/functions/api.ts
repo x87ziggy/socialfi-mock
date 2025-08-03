@@ -3,7 +3,6 @@ import serverless from 'serverless-http';
 import crypto from 'crypto';
 import nacl from 'tweetnacl';
 import bs58 from 'bs58';
-import { getStore } from '@netlify/blobs';
 
 const app = express();
 app.use(express.json());
@@ -98,6 +97,7 @@ app.post('/api/claim-referral/:refCode/:publicKey', async (req: Request, res: Re
   try {
     if (hasBlobs) {
       // Use Netlify Blobs in production
+      const { getStore } = await import('@netlify/blobs');
       const referralStore = getStore(REFERRAL_STORE);
       const refCodeStore = getStore(REF_CODE_STORE);
       
@@ -158,6 +158,7 @@ app.post('/api/claim-referral/:refCode/:publicKey', async (req: Request, res: Re
 app.get('/api/debug/storage', async (req: Request, res: Response) => {
   try {
     if (hasBlobs) {
+      const { getStore } = await import('@netlify/blobs');
       const referralStore = getStore(REFERRAL_STORE);
       const refCodeStore = getStore(REF_CODE_STORE);
       
