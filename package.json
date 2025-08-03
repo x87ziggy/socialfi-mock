@@ -3,10 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "build": "tsc && tsc -p tsconfig.functions.json",
-    "start": "node dist/index.js",
-    "dev": "nodemon",
-    "dev:local": "nodemon",
+    "build": "tsc -p tsconfig.functions.json",
+    "dev": "netlify dev",
     "serve": "netlify dev"
   },
   "keywords": [],

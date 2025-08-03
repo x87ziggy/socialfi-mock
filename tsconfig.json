@@ -1,13 +1,14 @@
 {
   "compilerOptions": {
-    "target": "ES2022", // Or a suitable ES version for your environment
+    "target": "ES2022",
     "module": "CommonJS",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "outDir": "./dist" // Output directory for compiled JavaScript
+    "outDir": "./dist/functions",
+    "rootDir": "./netlify/functions"
   },
-  "include": ["src/**/*.ts"], // Include all .ts files in the src directory
-  "exclude": ["node_modules"]
+  "include": ["netlify/functions/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
 }
